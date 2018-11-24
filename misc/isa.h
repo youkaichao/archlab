@@ -25,7 +25,7 @@ typedef enum { R_ARG, M_ARG, I_ARG, NO_ARG } arg_t;
 /* Different instruction types */
 typedef enum { I_HALT, I_NOP, I_RRMOVL, I_IRMOVL, I_RMMOVL, I_MRMOVL,
 	       I_ALU, I_JMP, I_CALL, I_RET, I_PUSHL, I_POPL,
-	       I_IADDL, I_LEAVE, I_POP2 } itype_t;
+	       I_IADDL, I_LEAVE, I_POP2, I_TEST } itype_t;
 
 /* Different ALU operations */
 typedef enum { A_ADD, A_SUB, A_AND, A_XOR, A_NONE } alu_t;

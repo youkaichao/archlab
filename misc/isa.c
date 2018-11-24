@@ -77,6 +77,8 @@ instr_t instruction_set[] =
     {"mrmovl", HPACK(I_MRMOVL, F_NONE), 6, M_ARG, 1, 0, R_ARG, 1, 1 },
     {"addl",   HPACK(I_ALU, A_ADD), 2, R_ARG, 1, 1, R_ARG, 1, 0 },
     {"subl",   HPACK(I_ALU, A_SUB), 2, R_ARG, 1, 1, R_ARG, 1, 0 },
+    {"cmpl",   HPACK(I_TEST, A_SUB), 2, R_ARG, 1, 1, R_ARG, 1, 0 },
+    {"testl",   HPACK(I_TEST, A_AND), 2, R_ARG, 1, 1, R_ARG, 1, 0 },
     {"andl",   HPACK(I_ALU, A_AND), 2, R_ARG, 1, 1, R_ARG, 1, 0 },
     {"xorl",   HPACK(I_ALU, A_XOR), 2, R_ARG, 1, 1, R_ARG, 1, 0 },
     /* arg1hi indicates number of bytes */
@@ -648,7 +650,7 @@ stat_t step_state(state_ptr s, FILE *error_file)
     lo0 = LO4(byte0);
 
     need_regids =
-	(hi0 == I_RRMOVL || hi0 == I_ALU || hi0 == I_PUSHL ||
+	(hi0 == I_RRMOVL || hi0 == I_ALU || hi0 == I_TEST || hi0 == I_PUSHL ||
 	 hi0 == I_POPL || hi0 == I_IRMOVL || hi0 == I_RMMOVL ||
 	 hi0 == I_MRMOVL || hi0 == I_IADDL);
 
@@ -785,6 +787,7 @@ stat_t step_state(state_ptr s, FILE *error_file)
 	s->pc = ftpc;
 	break;
     case I_ALU:
+    case I_TEST:
 	if (!ok1) {
 	    if (error_file)
 		fprintf(error_file,
@@ -794,7 +797,10 @@ stat_t step_state(state_ptr s, FILE *error_file)
 	argA = get_reg_val(s->r, hi1);
 	argB = get_reg_val(s->r, lo1);
 	val = compute_alu(lo0, argA, argB);
-	set_reg_val(s->r, lo1, val);
+    if(hi0 == I_ALU)
+    {
+        set_reg_val(s->r, lo1, val);
+    }
 	s->cc = compute_cc(lo0, argA, argB);
 	s->pc = ftpc;
 	break;

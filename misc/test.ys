@@ -1,0 +1,22 @@
+.pos 0
+
+irmovl  3, %eax
+irmovl  2, %edx
+cmpl %eax, %edx
+
+jle lessthan
+jmp greater
+
+lessthan:
+irmovl 1, %eax
+testl %eax, %edx
+jne end
+irmovl 9, %edx
+jmp end
+
+greater:
+irmovl  15, %edx
+jmp end
+
+end:
+halt
