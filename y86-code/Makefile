@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -O2
+CFLAGS=-Wall -O2 -I /usr/include/tcl8.5/
 
 ISADIR = ../misc
 YAS=$(ISADIR)/yas
